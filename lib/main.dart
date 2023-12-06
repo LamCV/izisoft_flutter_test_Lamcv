@@ -36,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        shadowColor: Color(0xfffafafa),
+        shadowColor: const Color(0xfffafafa),
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body: Container(color: Color(0xfffafafa), child: const HomePage()),
+      body: Container(color: Color(0xfffafafa), child: HomePage()),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

@@ -1,40 +1,102 @@
 class Campaign {
-  int? campaignID;
-  String? title;
-  String? description;
-  String? image;
-  String? timeRemain;
+  final int startTime;
+  final int endTime;
+  final String thumbnail;
+  final int amountTarget;
+  final int currentAmount;
+  final Author author;
+  final String title;
+  final List<Backer> backers;
+  final String id;
 
-  Campaign({this.campaignID, this.title, this.description, this.image, this.timeRemain});
+  Campaign({
+    required this.startTime,
+    required this.endTime,
+    required this.thumbnail,
+    required this.amountTarget,
+    required this.currentAmount,
+    required this.author,
+    required this.title,
+    required this.backers,
+    required this.id,
+  });
 
-  Campaign.fromJson(Map<String, dynamic> json) {
-    campaignID = json['merchant_uid'];
-    title = json['phone'];
-    description = json['amount'];
-    image = json['amount'];
-  }
-
-  @override
-  String toString() {
-    return {'merchantUid': campaignID, 'phone': title, 'amount': description, 'image': image}
-        .toString();
+  factory Campaign.fromJson(Map<String, dynamic> json) {
+    return Campaign(
+      startTime: json['startTime'],
+      endTime: json['endTime'],
+      thumbnail: json['thumbnail'],
+      amountTarget: json['amount_target'],
+      currentAmount: json['current_amount'],
+      author: Author.fromJson(json['author']),
+      title: json['title'],
+      backers:
+          (json['backers'] as List).map((e) => Backer.fromJson(e)).toList(),
+      id: json['id'],
+    );
   }
 }
 
-List<Campaign> generateFakeCampaigns(int numberOfCampaigns) {
-  List<Campaign> campaigns = [];
+class Author {
+  final String email;
+  final String name;
+  final String avatar;
+  final String gender;
+  final String describe;
+  final String job;
+  final String id;
 
-  for (int i = 1; i <= numberOfCampaigns; i++) {
-    campaigns.add(
-      Campaign(
-        campaignID: i,
-        title: 'Campaign $i',
-        description: 'Description for Campaign $i',
-        image: 'https://dailycoin.com/wp-content/uploads/2023/04/Binance_bnb_CZ_on-edge_Changpeng-Zhao_web.jpg',
-        timeRemain: '20 days left'
-      ),
+  Author({
+    required this.email,
+    required this.name,
+    required this.avatar,
+    required this.gender,
+    required this.describe,
+    required this.job,
+    required this.id,
+  });
+
+  factory Author.fromJson(Map<String, dynamic> json) {
+    return Author(
+      email: json['email'],
+      name: json['name'],
+      avatar: json['avatar'],
+      gender: json['gender'],
+      describe: json['describe'],
+      job: json['job'],
+      id: json['id'],
     );
   }
+}
 
-  return campaigns;
+class Backer {
+  final String email;
+  final String name;
+  final String avatar;
+  final String gender;
+  final String describe;
+  final String job;
+  final String id;
+
+  Backer({
+    required this.email,
+    required this.name,
+    required this.avatar,
+    required this.gender,
+    required this.describe,
+    required this.job,
+    required this.id,
+  });
+
+  factory Backer.fromJson(Map<String, dynamic> json) {
+    return Backer(
+      email: json['email'],
+      name: json['name'],
+      avatar: json['avatar'],
+      gender: json['gender'],
+      describe: json['describe'],
+      job: json['job'],
+      id: json['id'],
+    );
+  }
 }

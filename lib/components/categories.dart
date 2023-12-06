@@ -12,11 +12,15 @@ class CategoryItem extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
+        color: const Color(0xFF46526c),
       ),
       child: Center(
         child: Text(
           text,
-          style: TextStyle(fontSize: 18),
+          style: const TextStyle(
+            fontSize: 18,
+            color: Colors.white,
+          ),
         ),
       ),
     );

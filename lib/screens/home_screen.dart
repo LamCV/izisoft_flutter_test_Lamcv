@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:izisoft_flutter_test_caovanlam/components/campaigns.dart';
 import 'package:izisoft_flutter_test_caovanlam/components/categories.dart';
 import 'package:izisoft_flutter_test_caovanlam/controller/home_controller.dart';
-import 'package:izisoft_flutter_test_caovanlam/models/campaign.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final HomeController controller = HomeController();
+  HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
             Text(
               'Search...',
               style: TextStyle(color: Colors.grey),
-            ), // Hint Text
+            ),
           ],
         ),
       ),
@@ -65,16 +65,29 @@ class HomePage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         color: const Color(0xFF039e75),
+        gradient: const LinearGradient(
+          colors: [Colors.blue, Colors.green],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(Icons.face_rounded, color: Colors.white), // Search Icon
+          Container(
+            height: 30,
+            width: 30,
+            child: Icon(Icons.brightness_1, color: Colors.red),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
           SizedBox(width: 8),
           Text(
             'Make The World More Meaningful',
             style: TextStyle(color: Colors.white),
-          ), // Hint Text
+          ),
         ],
       ),
     );
@@ -86,7 +99,10 @@ class HomePage extends StatelessWidget {
       children: [
         const Text(
           'Category',
-          style: TextStyle(color: Colors.grey),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
         ),
         const SizedBox(height: 10),
         Container(
@@ -105,36 +121,44 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _tradingCampaign() {
-    List<Campaign>? campaigns = HomeController().campaigns;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Trading Compaign',
-              style: TextStyle(color: Colors.grey),
-            ),
-            Text(
-              'See more',
-              style: TextStyle(color: Colors.grey),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Container(
-          height: 200,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children:  [
-              CampaignItem(campaign: campaigns![0]),
-              CampaignItem(campaign: campaigns[1]),
-              CampaignItem(campaign: campaigns[2]),
+    return FutureBuilder(
+      future: controller.getListCampaigns(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Trading Campaign',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  Text(
+                    'See more',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 225,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: controller.campaigns.map((campaign) {
+                    return CampaignItem(campaign: campaign);
+                  }).toList(),
+                ),
+              ),
             ],
-          ),
-        ),
-      ],
+          );
+        }
+      },
     );
   }
 }
