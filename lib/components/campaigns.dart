@@ -21,36 +21,44 @@ class CampaignItem extends StatelessWidget {
       },
       child: Container(
         width: 225,
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        margin: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           color: Colors.green,
           image: DecorationImage(
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
             image: NetworkImage(
-              campaign!.image!,
+              campaign!.thumbnail,
             ),
           ),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Stack(
           children: [
-            const Positioned(
-                right: 10, top: 10, child: Icon(Icons.masks_sharp)),
+            Positioned(
+              right: 10,
+              top: 10,
+              child: Container(
+                child: Icon(Icons.masks_rounded),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
             Positioned(
               left: 10,
               bottom: 10,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                height: 25,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                  border:
-                      Border.all(color: Colors.grey), // Customize border color
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  campaign!.timeRemain!,
-                  style: TextStyle(fontSize: 15),
+                  '${timeRemain(campaign!.startTime, campaign!.endTime)} days left',
+                  style: const TextStyle(fontSize: 15),
                 ),
               ),
             ),
@@ -58,5 +66,11 @@ class CampaignItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String timeRemain(int startTime, int endTime) {
+    int timestamp = endTime - startTime;
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    return dateTime.day.toString();
   }
 }
